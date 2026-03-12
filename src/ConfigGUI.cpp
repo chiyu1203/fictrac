@@ -19,7 +19,8 @@
 #if defined(PGR_USB2) || defined(PGR_USB3)
 #include "PGRSource.h"
 #endif // PGR_USB2/3
-
+#if defined(BASLER_USB3)
+#include "BaslerSource.h"
 /// OpenCV individual includes required by gcc?
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -152,7 +153,7 @@ void createZoomROI(Mat& zoom_roi, const Mat& frame, const Point2d& pt, int orig_
 ///
 /// Constructor.
 ///
-ConfigGui::ConfigGui(string config_fn, string src_override)
+ConfigGui::ConfigGui(string config_fn)
 : _config_fn(config_fn)
 {
     /// Load and parse config file.
@@ -163,22 +164,22 @@ ConfigGui::ConfigGui(string config_fn, string src_override)
 
     /// Read source file name.
     string input_fn = _cfg("src_fn");
-    if (!src_override.empty()) {
-        // override src_fn in config file with cli arg
-        input_fn = src_override;
-        LOG("Using input_fn=%s", input_fn.c_str());
-    } else if (input_fn.empty()) {
+    if (input_fn.empty()) {
         LOG_ERR("Error! No src_fn defined in config file.");
         return;
     }
 
     /// Open the image source.
-#if defined(PGR_USB2) || defined(PGR_USB3)
+#if defined(PGR_USB2) || defined(PGR_USB3) || defined(BASLER_USB3)
     try {
         if (input_fn.size() > 2) { throw std::exception(); }
         // first try reading input as camera id
         int id = std::stoi(input_fn);
+#if defined(PGR_USB2) || defined(PGR_USB3)
         _source = std::make_shared<PGRSource>(id);
+#elif defined(BASLER_USB3)
+        _source = std::make_shared<BaslerSource>(id);
+#endif // PGR/BASLER
     }
     catch (...) {
         // then try loading as video file

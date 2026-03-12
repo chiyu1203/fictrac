@@ -60,7 +60,7 @@ if(WIN32)
         find_library(PGR_LIB FlyCapture2_v140.lib)
     elseif(BASLER_USB3)
         set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${BASLER_DIR}/Development/lib/x64)
-		find_library(BASLER_LIB PylonBase_MD_VC120_v5_0.lib)
+		find_library(BASLER_LIB PylonBase_v7_1.lib)
 		
 		file(GLOB BASLER_LIBS ${BASLER_DIR}/Development/lib/x64/*.lib)
     endif()
