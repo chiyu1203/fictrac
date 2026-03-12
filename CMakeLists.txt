@@ -30,13 +30,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 # optional build config
 option(PGR_USB3 "Use Spinnaker SDK to capture from PGR USB3 cameras" OFF) # Disabled by default
 option(PGR_USB2 "Use FlyCapture SDK to capture from PGR USB2 cameras" OFF) # Disabled by default
-option(BASLER_USB3 "Use Pylon SDK to capture from Basler USB3 cameras" OFF) # Disabled by default
+set(BASLER_USB3 ON) # Basler USB3 support is mandatory
+set(BASLER_DIR "C:/Program Files/Basler/pylon 7")
 if(PGR_USB3)
     set(PGR_DIR "." CACHE PATH "Path to PGR Spinnaker SDK folder")
 elseif(PGR_USB2)
     set(PGR_DIR "." CACHE PATH "Path to PGR FlyCapture SDK folder")
-elseif(BASLER_USB3)
-    set(BASLER_DIR "." CACHE PATH "Path to Basler Pylon SDK folder")
 endif()
 
 # find dependencies
